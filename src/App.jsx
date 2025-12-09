@@ -13,7 +13,12 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <UserLoginStatusContext.Provider value={[isLoggedIn, setIsLoggedIn, currentUsername, setCurrentUsername]}>
+      <UserLoginStatusContext.Provider value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        currentUsername,
+        setCurrentUsername
+      }}>
         <Routes>
           <Route path="/" element={<AppLayout />}>
             {routes.map((r) =>

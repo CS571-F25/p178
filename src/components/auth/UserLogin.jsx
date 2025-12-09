@@ -7,7 +7,7 @@ export default function UserLogin() {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
-  const [ , setIsLoggedIn, , setCurrentUsername] = useContext(UserLoginStatusContext);
+  const { setIsLoggedIn, setCurrentUsername } = useContext(UserLoginStatusContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -17,7 +17,7 @@ export default function UserLogin() {
 
     if (!username || !password) {
       alert("Please provide both username and password!");
-      return; 
+      return;
     }
 
     // const sevenDigits = /^\d{7}$/;
