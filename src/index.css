@@ -25,6 +25,34 @@ html, body {
   flex-direction: column;
 }
 
+.logout-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
+.logout-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 2rem 3rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  color: var(--color-text);
+}
+
+.logout-card h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.logout-card p {
+  margin: 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
 .navbar {
   width: 100%;
   background-color: var(--color-navbar-bg);
@@ -74,6 +102,27 @@ html, body {
 .navbar-link:focus-visible {
   outline: 2px solid var(--color-link-hover);
   outline-offset: 2px;
+}
+
+.navbar-logout-btn {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  font-style: italic;
+  opacity: 0.85;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  color: #000;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.navbar-logout-btn:hover {
+  opacity: 1;
+  background-color: #fff;
 }
 
 .app-layout main {

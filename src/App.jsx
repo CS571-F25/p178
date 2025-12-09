@@ -7,9 +7,11 @@ import { useState } from 'react';
 export default function App() {
   const initialIsLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
   const initialUsername = sessionStorage.getItem('currentUsername') || '';
+  const initialRole = localStorage.getItem('role') || 'user';
 
   const [isLoggedIn, setIsLoggedIn] = useState(initialIsLoggedIn);
   const [currentUsername, setCurrentUsername] = useState(initialUsername);
+  const [role, setRole] = useState(initialRole);
 
   return (
     <BrowserRouter>
@@ -17,7 +19,9 @@ export default function App() {
         isLoggedIn,
         setIsLoggedIn,
         currentUsername,
-        setCurrentUsername
+        setCurrentUsername,
+        role,
+        setRole
       }}>
         <Routes>
           <Route path="/" element={<AppLayout />}>

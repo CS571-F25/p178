@@ -4,7 +4,7 @@ import UserLoginStatusContext from '../contexts/UserLoginStatusContext';
 import routes from '../../routes.jsx';
 
 export default function Navbar() {
-  const { isLoggedIn, setIsLoggedIn, setCurrentUsername, currentUsername } =
+  const { isLoggedIn, role, setIsLoggedIn, setCurrentUsername, currentUsername } =
     useContext(UserLoginStatusContext);
 
   const navigate = useNavigate();
@@ -14,26 +14,20 @@ export default function Navbar() {
     setIsLoggedIn(false);
     sessionStorage.setItem('isLoggedIn', 'false');
     sessionStorage.removeItem('currentUsername');
+    localStorage.removeItem('role');
     navigate('/');
   };
 
   return (
     <nav className="navbar" style={{ position: 'relative' }}>
-      
+      {/* Logout button on top right */}
       {isLoggedIn && (
-        <span
-          style={{
-            position: 'absolute',
-            top: '50%',
-            right: '12px',
-            transform: 'translateY(-50%)',
-            fontStyle: 'italic',
-            opacity: 0.75,
-            pointerEvents: 'none'
-          }}
+        <button
+          onClick={() => navigate('/logout')}
+          className="navbar-logout-btn"
         >
-          {currentUsername}
-        </span>
+          Logout {currentUsername}
+        </button>
       )}
 
       <span className="navbar-brand">BookWyrm App</span>
@@ -43,6 +37,8 @@ export default function Navbar() {
           .filter(r => {
             if (r.name === 'My Hoard' && !isLoggedIn) return false;
             if (r.name === 'Login' && isLoggedIn) return false;
+            if (r.name === 'Admin' && role !== 'admin') return false;
+            if (r.name === 'Logout') return false;
             return true;
           })
           .map(r => (
@@ -58,20 +54,6 @@ export default function Navbar() {
               </NavLink>
             </li>
           ))}
-
-        {isLoggedIn && (
-          <li>
-            <span
-              className="navbar-link"
-              onClick={handleLogout}
-              role="button"
-              tabIndex={0}
-              onKeyPress={(e) => { if (e.key === 'Enter') handleLogout(); }}
-            >
-              Log Out
-            </span>
-          </li>
-        )}
       </ul>
     </nav>
   );

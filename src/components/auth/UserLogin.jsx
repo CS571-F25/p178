@@ -7,36 +7,81 @@ export default function UserLogin() {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
-  const { setIsLoggedIn, setCurrentUsername } = useContext(UserLoginStatusContext);
+  const { setIsLoggedIn, setCurrentUsername, setRole } =
+    useContext(UserLoginStatusContext);
 
-  const handleLogin = (e) => {
+  const API_URL_USERS = "https://cs571api.cs.wisc.edu/rest/f25/bucket/users";
+
+  // Helper to convert API results into an array of users
+  const parseUsers = (results) => {
+    if (!results) return [];
+    return Object.keys(results).map((id) => ({
+      id,
+      ...results[id]
+    }));
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const username = usernameRef.current.value;
-    const password = passwordRef.current.value;
+    const username = usernameRef.current.value.trim();
+    const password = passwordRef.current.value.trim();
 
     if (!username || !password) {
       alert("Please provide both username and password!");
       return;
     }
 
-    // const sevenDigits = /^\d{7}$/;
-    // if (!sevenDigits.test(password)) {
-    //   alert("Your PIN must be a 7-digit number!");
-    //   return;
-    // }
+    try {
 
-    // Placeholder login: accept anything
-    setIsLoggedIn(true);
-    setCurrentUsername(username);
-    sessionStorage.setItem('isLoggedIn', 'true');
-    sessionStorage.setItem('currentUsername', username);
+      const res = await fetch(API_URL_USERS, {
+        method: "GET",
+        headers: {
+          "X-CS571-ID": CS571.getBadgerId(),
+        }
+      });
 
-    usernameRef.current.value = '';
-    passwordRef.current.value = '';
+      //console.log("Fetch response:", res);
 
-    alert(`Logged in as ${username}`);
-    navigate('/'); // redirect to home
+      if (!res.ok)
+        throw new Error(`API fetch failed: ${res.status}`);
+
+      const data = await res.json();
+
+      const users = parseUsers(data.results);
+
+      const user = users.find((u) => u.username === username);
+      if (!user) {
+        alert("User not found! Please try again.");
+        console.log(`Login for ${username} failed: username not found`);
+        return;
+      }
+
+      if (user.password !== password) {
+        alert("Login failed, please try again.");
+        console.log(`Login to ${username} failed: wrong password`);
+        return;
+      }
+
+      // Successful login
+      console.log(`User ${user.username} logged in (${user.role})`);
+
+      setIsLoggedIn(true);
+      setCurrentUsername(user.username);
+      setRole(user.role || "user");
+
+      sessionStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("currentUsername", user.username);
+      sessionStorage.setItem("role", user.role || "user");
+
+      usernameRef.current.value = "";
+      passwordRef.current.value = "";
+
+      navigate("/");
+    } catch (err) {
+      //console.error("Login error:", err);
+      alert("Login failed, please try again.");
+    }
   };
 
   return (

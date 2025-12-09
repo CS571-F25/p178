@@ -13,7 +13,7 @@ export default function AppLayout() {
       </main>
 
       <footer>
-        <p>2025 BookWyrm App. Rights maybe reserved.</p>
+        <p>2025 BookWyrm App.</p>
       </footer>
     </div>
   );
