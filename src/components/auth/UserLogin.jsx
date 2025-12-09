@@ -17,7 +17,7 @@ export default function UserLogin() {
 
     if (!username || !password) {
       alert("Please provide both username and password!");
-      return;
+      return; 
     }
 
     // const sevenDigits = /^\d{7}$/;
