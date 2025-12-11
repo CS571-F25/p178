@@ -1,59 +1,80 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import UserLoginStatusContext from '../contexts/UserLoginStatusContext';
-import routes from '../../routes.jsx';
+import { useState, useContext } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import UserContext from '../contexts/UserContext.jsx';
 
-export default function Navbar() {
-  const { isLoggedIn, role, setIsLoggedIn, setCurrentUsername, currentUsername } =
-    useContext(UserLoginStatusContext);
-
+export default function NavBar() {
+  const { user, loading, logout } = useContext(UserContext);
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  if (loading) return null;
+
+  const isLoggedIn = !!user;
+  const isAdmin = user?.role === 'admin';
 
   const handleLogout = () => {
-    setCurrentUsername('');
-    setIsLoggedIn(false);
-    sessionStorage.setItem('isLoggedIn', 'false');
-    sessionStorage.removeItem('currentUsername');
-    localStorage.removeItem('role');
+    logout();
     navigate('/');
   };
 
   return (
-    <nav className="navbar" style={{ position: 'relative' }}>
-      {/* Logout button on top right */}
-      {isLoggedIn && (
+    <nav className="navbar">
+      <div className="navbar-left">
         <button
-          onClick={() => navigate('/logout')}
-          className="navbar-logout-btn"
+          className="navbar-hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
         >
-          Logout {currentUsername}
+          ☰
         </button>
-      )}
+        <Link className="navbar-brand" to="/">BookWyrm</Link>
+      </div>
 
-      <span className="navbar-brand">BookWyrm App</span>
-
-      <ul className="navbar-links">
-        {routes
-          .filter(r => {
-            if (r.name === 'My Hoard' && !isLoggedIn) return false;
-            if (r.name === 'Login' && isLoggedIn) return false;
-            if (r.name === 'Admin' && role !== 'admin') return false;
-            if (r.name === 'Logout') return false;
-            return true;
-          })
-          .map(r => (
-            <li key={r.path}>
-              <NavLink
-                to={r.path}
-                className={({ isActive }) =>
-                  isActive ? 'active navbar-link' : 'navbar-link'
-                }
-                end={r.path === '/'}
-              >
-                {r.name}
+      <ul className={`navbar-links ${menuOpen ? 'open' : ''}`}>
+        <li>
+          <NavLink to="/" end className="navbar-link">
+            Home
+          </NavLink>
+        </li>
+        {isLoggedIn && (
+          <>
+            <li>
+              <NavLink to="/hoard" className="navbar-link">
+                My Hoard
               </NavLink>
             </li>
-          ))}
+            <li>
+              <NavLink to="/profile" className="navbar-link">
+              Profile
+              </NavLink>
+            </li>
+            {isAdmin && (
+              <li>
+                <NavLink to="/admin" className="navbar-link">
+                  Admin Panel
+                </NavLink>
+              </li>
+            )}
+            <li>
+              <button className="navbar-logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </li>
+          </>
+        )}
+        {!isLoggedIn && (
+          <>
+            <li>
+              <NavLink to="/login" className="navbar-link">
+                Login
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/register" className="navbar-link">
+                Register
+              </NavLink>
+            </li>
+          </>
+        )}
       </ul>
     </nav>
   );

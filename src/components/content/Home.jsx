@@ -1,23 +1,12 @@
-import dragonImg from '../../assets/littledragon_facingright.png'; 
+import { useContext } from 'react';
+import UserContext from '../contexts/UserContext.jsx';
+import UserHome from './UserHome.jsx';
+import PublicHome from './PublicHome.jsx';
 
 export default function Home() {
-  return (
-    <div>
-      <h1 tabIndex={-1}>BookWyrm Library</h1>
+  const { user, loading } = useContext(UserContext);
 
-      <section aria-labelledby="banner-title" className="card-banner">
-        <h2 id="banner-title" className="fs-2">Site Banner Placeholder</h2>
-        <p className="text-white-50">Primary site image or graphic will go here.</p>
-        <img
-          src={dragonImg}
-          alt="A majestic dragon guarding books"
-          style={{ maxWidth: '100%', height: 'auto', marginTop: '1rem' }}
-        />
-      </section>
+  if (loading) return null; // prevent early render
 
-      <div>
-        <h2><em>Where every book is a treasure!</em></h2>
-      </div>
-    </div>
-  );
+  return user ? <UserHome /> : <PublicHome />;
 }

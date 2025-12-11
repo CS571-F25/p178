@@ -53,6 +53,333 @@ html, body {
   opacity: 0.9;
 }
 
+/* Admin page layout */
+.admin-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Role container */
+.role-container {
+  display: flex;
+  gap: 2rem; /* keeps spacing between columns */
+  flex-wrap: wrap;
+}
+
+.role-group {
+  flex: 1 1 200px; /* allows some flexibility but sets a min width */
+  max-width: calc(200px - 8px); /* make it slightly narrower than the min width */
+  box-sizing: border-box;
+}
+
+.role-header {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* User list */
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-item {
+  margin-bottom: 0.5rem;
+}
+
+/* Sub-link style for usernames (matches navbar font/weight/colors) */
+.sub-link {
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: #fff; /* white like navbar links */
+  font-size: 0.9rem; /* smaller than navbar */
+  text-decoration: none; /* no underline */
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.sub-link:hover {
+  color: var(--color-link-hover);
+}
+
+/* User card */
+.user-card {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  background-color: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  padding: 0 1rem;
+  margin-top: 0.5rem;
+  color: var(--color-text);
+}
+
+/* Expanded state */
+.user-card.expanded {
+  max-height: 250px;
+  padding: 1rem;
+  overflow-y: auto; /* scroll appears if needed */
+  box-sizing: border-box;
+}
+
+/* Scrollbar styling */
+.user-card.expanded::-webkit-scrollbar {
+  width: 8px;
+}
+
+.user-card.expanded::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+}
+
+.user-card.expanded::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.3);
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+
+/* Error text */
+.error-text {
+  color: #ff8080;
+  margin-top: 0.5rem;
+}
+
+/* Login/Register page container */
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+/* Page heading */
+.auth-page h2 {
+  font-size: 2.25rem;
+  margin-bottom: 2rem;
+  color: var(--color-text);
+}
+
+/* Form styling */
+.auth-page form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Input styling */
+.auth-page input {
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.auth-page input:focus {
+  border-color: var(--color-link-hover);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+/* Submit button styling */
+.auth-page button {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border-radius: 1.5rem;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Login button */
+.auth-page button.login-btn {
+  background-color: var(--color-navbar-bg);
+}
+
+.auth-page button.login-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Register button */
+.auth-page button.register-btn {
+  background-color: var(--color-banner);
+}
+
+.auth-page button.register-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+}
+
+.auth-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.auth-link a {
+  color: var(--color-link);
+  font-weight: bold;
+  font-size: 1rem;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.auth-link a:hover {
+  color: var(--color-link-hover);
+}
+
+/* Error message styling */
+.auth-page .error-text {
+  color: #ff8080;
+  font-weight: bold;
+}
+
+/* PublicHome styling */
+.public-home {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.public-home h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--color-text);
+}
+
+.recent-books p {
+  font-size: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+/* Auth buttons container */
+.auth-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* Shared auth button styles */
+.auth-btn {
+  font-size: 1.75rem;
+  font-weight: bold;
+  padding: 1rem 3rem;
+  border-radius: 1.5rem;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+}
+
+/* Login button styling */
+.auth-btn.login-btn {
+  background-color: var(--color-navbar-bg);
+  color: var(--color-text);
+}
+
+.auth-btn.login-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Register button styling */
+.auth-btn.register-btn {
+  background-color: var(--color-banner);
+  color: var(--color-text);
+}
+
+.auth-btn.register-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Profile button styling */
+.auth-btn.profile-btn {
+  background-color: var(--color-banner);
+  color: var(--color-text);
+}
+
+.auth-btn.profile-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Main fetch button */
+.main-button {
+  font-weight: bold;
+  color: #fff;
+  background-color: var(--color-navbar-bg);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 1rem; /* added padding below button */
+}
+
+.main-button:hover:not(:disabled) {
+  background-color: var(--color-banner);
+}
+
+.main-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.styled-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.2);
+  background-color: rgba(255, 255, 255, 0.5); /* semi-transparent */
+  font-size: 1rem;
+  color: #333;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.styled-input:focus {
+  outline: none;
+  border-color: #666;
+  background-color: rgba(255, 255, 255, 0.7); /* slightly lighter on focus */
+}
+
+.book-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.book-card {
+  background: rgba(255, 255, 255, 0.1); /* slightly transparent */
+  border-radius: 12px;
+  padding: 1rem;
+  min-width: 200px;
+  flex: 1 1 200px;
+  font-family: inherit;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
 .navbar {
   width: 100%;
   background-color: var(--color-navbar-bg);
@@ -60,24 +387,55 @@ html, body {
   display: flex;
   align-items: center;
   padding: 0.75rem 2rem;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 2rem;
+}
+
+/* Left section: brand + hamburger */
+.navbar-left {
+  display: flex;
+  align-items: center; /* vertically center brand + hamburger */
+  gap: 0.5rem;
 }
 
 .navbar-brand {
   font-weight: bold;
   font-size: 1.25rem;
+  line-height: 1; /* ensures vertical alignment */
 }
 
+/* Hamburger button for small screens */
+.navbar-hamburger {
+  display: none; /* hidden by default */
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+/* Nav links container */
 .navbar-links {
-  list-style: none;
-  display: flex;
-  gap: 1.5rem;
   margin: 0;
   padding: 0;
+  display: flex;
+  gap: 1.5rem;
 }
 
-/* Shared styles for NavLinks and logout span */
+.navbar-links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar-links li {
+  list-style: none;
+}
+
+/* Shared styles for links */
 .navbar-links a,
 .navbar-link {
   color: var(--color-link);
@@ -89,6 +447,7 @@ html, body {
 .navbar-links a:hover,
 .navbar-link:hover {
   color: var(--color-link-hover);
+  text-decoration: none;
 }
 
 .navbar-links a.active,
@@ -104,26 +463,48 @@ html, body {
   outline-offset: 2px;
 }
 
+/* Logout button styled like other links, italic */
 .navbar-logout-btn {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
-  font-style: italic;
-  opacity: 0.85;
-  padding: 0.3rem 0.6rem;
+  background: none;
+  border: none;
+  color: var(--color-link);
   cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #f8f9fa;
-  color: #000;
-  transition: background-color 0.2s, opacity 0.2s;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color 0.2s, font-size 0.2s;
 }
 
 .navbar-logout-btn:hover {
-  opacity: 1;
-  background-color: #fff;
+  color: var(--color-link-hover);
+  text-decoration: none;
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar-hamburger {
+    display: block; /* show hamburger on small screens */
+  }
+
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    background-color: var(--color-navbar-bg);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 1rem 2rem;
+  }
+
+  .navbar-links.open {
+    display: flex;
+  }
+}
+
+
 
 .app-layout main {
   max-width: 1200px;

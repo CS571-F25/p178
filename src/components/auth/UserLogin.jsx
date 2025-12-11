@@ -1,98 +1,83 @@
-import React, { useRef, useContext } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import UserLoginStatusContext from '../contexts/UserLoginStatusContext';
+import { useState, useContext } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import UserContext from '../contexts/UserContext.jsx';
+import { API_USERS_URL, authHeaders } from '../../apiConfig.js';
 
 export default function UserLogin() {
-  const usernameRef = useRef();
-  const passwordRef = useRef();
+  const { setUser } = useContext(UserContext);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { setIsLoggedIn, setCurrentUsername, setRole } =
-    useContext(UserLoginStatusContext);
+  const location = useLocation();
 
-  const API_URL_USERS = "https://cs571api.cs.wisc.edu/rest/f25/bucket/users";
-
-  // Helper to convert API results into an array of users
-  const parseUsers = (results) => {
-    if (!results) return [];
-    return Object.keys(results).map((id) => ({
-      id,
-      ...results[id]
-    }));
-  };
+  const registeredSuccess = location.state?.registered; // true if redirected from register
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    const username = usernameRef.current.value.trim();
-    const password = passwordRef.current.value.trim();
-
-    if (!username || !password) {
-      alert("Please provide both username and password!");
-      return;
-    }
+    setError('');
 
     try {
-
-      const res = await fetch(API_URL_USERS, {
-        method: "GET",
-        headers: {
-          "X-CS571-ID": CS571.getBadgerId(),
-        }
-      });
-
-      //console.log("Fetch response:", res);
-
-      if (!res.ok)
-        throw new Error(`API fetch failed: ${res.status}`);
-
+      const res = await fetch(API_USERS_URL, { headers: authHeaders });
+      if (!res.ok) throw new Error('Failed to fetch users');
       const data = await res.json();
 
-      const users = parseUsers(data.results);
+      const usersArray = Object.values(data.results || data); // normalize array
+      const matchedUser = usersArray.find(
+        (u) => u.username === username && u.password === password
+      );
+      if (!matchedUser) throw new Error('Invalid credentials');
 
-      const user = users.find((u) => u.username === username);
-      if (!user) {
-        alert("User not found! Please try again.");
-        console.log(`Login for ${username} failed: username not found`);
-        return;
-      }
+      const userObj = {
+        username: matchedUser.username,
+        role: matchedUser.role,
+        permissions: matchedUser.permissions || [],
+        loggedBooks: matchedUser.loggedBooks || [],
+      };
 
-      if (user.password !== password) {
-        alert("Login failed, please try again.");
-        console.log(`Login to ${username} failed: wrong password`);
-        return;
-      }
+      setUser(userObj);
+      sessionStorage.setItem('currentUsername', matchedUser.username);
+      sessionStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('role', userObj.role);
 
-      // Successful login
-      console.log(`User ${user.username} logged in (${user.role})`);
-
-      setIsLoggedIn(true);
-      setCurrentUsername(user.username);
-      setRole(user.role || "user");
-
-      sessionStorage.setItem("isLoggedIn", "true");
-      sessionStorage.setItem("currentUsername", user.username);
-      sessionStorage.setItem("role", user.role || "user");
-
-      usernameRef.current.value = "";
-      passwordRef.current.value = "";
-
-      navigate("/");
+      navigate('/');
     } catch (err) {
-      //console.error("Login error:", err);
-      alert("Login failed, please try again.");
+      setError(err.message);
     }
   };
 
   return (
-    <Form onSubmit={handleLogin}>
-      <h1>Login</h1>
-      <Form.Label>Username</Form.Label>
-      <Form.Control ref={usernameRef} />
-      <Form.Label>Password</Form.Label>
-      <Form.Control type="password" ref={passwordRef} />
-      <br />
-      <Button type="submit">Log In</Button>
-    </Form>
+    <div className="auth-page">
+      <h2>Login</h2>
+
+      {registeredSuccess && (
+        <p className="success-text">Successfully registered! Log in now.</p>
+      )}
+      {error && <p className="error-text">{error}</p>}
+
+      <form onSubmit={handleLogin}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit" className="auth-btn login-btn">Login</button>
+      </form>
+
+      <div className="auth-link">
+        <p>
+          Don't have an account? <span><Link to="/register">Register</Link></span>
+        </p>
+      </div>
+    </div>
   );
 }
